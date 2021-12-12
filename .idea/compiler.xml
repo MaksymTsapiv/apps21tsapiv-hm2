@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="ImmutableCollections" />
+        <module name="apps21tsapiv-hm2" />
       </profile>
     </annotationProcessing>
   </component>
