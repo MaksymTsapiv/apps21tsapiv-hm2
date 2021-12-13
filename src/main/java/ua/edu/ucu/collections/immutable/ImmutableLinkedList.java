@@ -2,8 +2,7 @@ package ua.edu.ucu.collections.immutable;
 
 public final class ImmutableLinkedList implements ImmutableList {
     private final Node head;
-    private Object[] elements;
-    private Node[] nodes;
+    private final Node[] nodes;
     private Node tail;
 
     public ImmutableLinkedList(Object[] elements) {
@@ -22,41 +21,47 @@ public final class ImmutableLinkedList implements ImmutableList {
     }
 
     public ImmutableLinkedList() {
+        this.nodes = new Node[0];
         this.head = null;
     }
 
     @Override
     public ImmutableList add(Object e) {
-        ImmutableLinkedList linkedList = new ImmutableLinkedList(this.elements);
-        Node node = new Node(e);
-        linkedList.tail.setNext(node);
-        node.setPrevious(linkedList.tail);
-        linkedList.tail = node;
-        return linkedList;
+        if (this.size() == 0){
+            Object[] temp = new Object[1];
+            temp[0] = e;
+            return new ImmutableLinkedList(temp);
+        }
+        Object[] temp = new Object[this.nodes.length + 1];
+        for (int i = 0; i < this.nodes.length; i++) {
+            temp[i] = this.nodes[i].getValue();
+        }
+        temp[this.nodes.length] = e;
+        return new ImmutableLinkedList(temp);
     }
 
     @Override
     public ImmutableList add(int index, Object e) {
         int flag = 0;
-        Object[] temp = new Object[this.elements.length + 1];
-        for (int i = 0; i < this.elements.length + 1; i++) {
+        Object[] temp = new Object[this.nodes.length + 1];
+        for (int i = 0; i < this.nodes.length; i++) {
             if (i == index) {
                 flag = 1;
                 temp[i] = e;
             }
-            temp[i + flag] = this.elements[i];
+            temp[i + flag] = this.nodes[i].getValue();
         }
         return new ImmutableLinkedList(temp);
     }
 
     @Override
     public ImmutableList addAll(Object[] c) {
-        Object[] temp = new Object[this.elements.length + c.length];
-        for (int i = 0; i < this.elements.length + c.length; i++) {
-            if (i < this.elements.length) {
-                temp[i] = elements[i];
+        Object[] temp = new Object[this.nodes.length + c.length];
+        for (int i = 0; i < this.nodes.length + c.length; i++) {
+            if (i < this.nodes.length) {
+                temp[i] = this.nodes[i];
             } else {
-                temp[i] = c[i - elements.length];
+                temp[i] = c[i - nodes.length];
             }
         }
         return new ImmutableLinkedList(temp);
@@ -64,12 +69,15 @@ public final class ImmutableLinkedList implements ImmutableList {
 
     @Override
     public ImmutableList addAll(int index, Object[] c) {
-        Object[] temp = new Object[this.elements.length + c.length];
-        for (int i = 0; i < this.elements.length + c.length; i++) {
+        int j = 0;
+        Object[] temp = new Object[this.nodes.length + c.length];
+        for (int i = 0; i < this.nodes.length; i++) {
             if (i == index) {
-                temp[i] = c[i - index];
+                for (; j < c.length; j++) {
+                    temp[i + j] = c[j];
+                }
             }
-            temp[i] = this.elements[i];
+            temp[i + j] = this.nodes[i].getValue();
         }
         return new ImmutableLinkedList(temp);
     }
@@ -81,32 +89,36 @@ public final class ImmutableLinkedList implements ImmutableList {
 
     @Override
     public ImmutableList remove(int index) {
-        Object[] temp = new Object[this.elements.length - 1];
-        for (int i = 0; i < this.elements.length; i++) {
+        if(this.nodes.length == 1) return new ImmutableLinkedList();
+        int flag = 0;
+        Object[] temp = new Object[this.nodes.length - 1];
+        for (int i = 0; i < this.nodes.length; i++) {
             if (i == index) {
+                flag = 1;
                 continue;
             }
-            temp[i] = this.elements[i];
+            temp[i - flag] = this.nodes[i].getValue();
         }
         return new ImmutableLinkedList(temp);
     }
 
     @Override
     public ImmutableList set(int index, Object e) {
-        Object[] temp = new Object[this.elements.length];
-        for (int i = 0; i < this.elements.length; i++) {
+        Object[] temp = new Object[this.nodes.length];
+        for (int i = 0; i < this.nodes.length; i++) {
             if (i == index) {
                 temp[i] = e;
+                continue;
             }
-            temp[i] = this.elements[i];
+            temp[i] = this.nodes[i].getValue();
         }
         return new ImmutableLinkedList(temp);
     }
 
     @Override
     public int indexOf(Object e) {
-        for (int i = 0; i < this.elements.length; i++) {
-            if (this.elements[i] == e) {
+        for (int i = 0; i < this.nodes.length; i++) {
+            if (this.nodes[i].getValue() == e) {
                 return i;
             }
         }
@@ -130,7 +142,11 @@ public final class ImmutableLinkedList implements ImmutableList {
 
     @Override
     public Object[] toArray() {
-        return this.nodes;
+        Object[] temp = new Object[this.nodes.length];
+        for (int i = 0; i < this.nodes.length; i++) {
+            temp[i] = this.nodes[i].getValue();
+        }
+        return temp;
     }
 
     public ImmutableLinkedList addFirst(Object e) {
@@ -138,7 +154,7 @@ public final class ImmutableLinkedList implements ImmutableList {
     }
 
     public ImmutableLinkedList addLast(Object e) {
-        return (ImmutableLinkedList) add(this.elements.length - 1, e);
+        return (ImmutableLinkedList) add(this.nodes.length - 1, e);
     }
 
     public Node getHead() {
@@ -162,6 +178,6 @@ public final class ImmutableLinkedList implements ImmutableList {
     }
 
     public ImmutableLinkedList removeLast() {
-        return (ImmutableLinkedList) remove(this.elements.length - 1);
+        return (ImmutableLinkedList) remove(this.nodes.length - 1);
     }
 }

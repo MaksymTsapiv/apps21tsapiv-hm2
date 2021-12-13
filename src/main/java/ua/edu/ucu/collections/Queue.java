@@ -15,11 +15,11 @@ public class Queue {
 
     public Object dequeue() {
         Object el = peek();
-        this.queue.remove(0);
+        this.queue = (ImmutableLinkedList) this.queue.remove(0);
         return el;
     }
 
     public void enqueue(Object e) {
-        this.queue.add(e);
+        this.queue = (ImmutableLinkedList) this.queue.add(e);
     }
 }

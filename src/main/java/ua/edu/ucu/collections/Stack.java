@@ -10,16 +10,16 @@ public class Stack {
     }
 
     public void push(Object e) {
-        this.stack.add(this.stack.size() - 1, e);
+        this.stack = (ImmutableLinkedList) this.stack.add(0, e);
     }
 
     public Object pop() {
         Object el = peek();
-        this.stack.remove(this.stack.size() - 1);
+        this.stack = (ImmutableLinkedList) this.stack.remove(0);
         return el;
     }
 
     public Object peek() {
-        return this.stack.get(this.stack.size() - 1);
+        return this.stack.get(0);
     }
 }

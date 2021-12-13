@@ -43,7 +43,7 @@ public final class ImmutableArrayList implements ImmutableList {
         Object[] temp = new Object[this.elements.length + c.length];
         for (int i = 0; i < this.elements.length + c.length; i++) {
             if (i < this.elements.length) {
-                temp[i] = elements[i];
+                temp[i] = this.elements[i];
             } else {
                 temp[i] = c[i - elements.length];
             }
@@ -53,29 +53,38 @@ public final class ImmutableArrayList implements ImmutableList {
 
     @Override
     public ImmutableList addAll(int index, Object[] c) {
+        int j = 0;
         Object[] temp = new Object[this.elements.length + c.length];
-        for (int i = 0; i < this.elements.length + c.length; i++) {
+        for (int i = 0; i < this.elements.length; i++) {
             if (i == index) {
-                temp[i] = c[i - index];
+                for (; j < c.length; j++) {
+                    temp[i + j] = c[j];
+                }
             }
-            temp[i] = this.elements[i];
+            temp[i + j] = this.elements[i];
         }
         return new ImmutableArrayList(temp);
     }
 
     @Override
     public Object get(int index) {
-        return this.elements[index];
+        Object[] temp = new Object[elements.length];
+        for (int i = 0; i < elements.length; i++) {
+            temp[i] = elements[i];
+        }
+        return new ImmutableArrayList(temp).toArray()[index];
     }
 
     @Override
     public ImmutableList remove(int index) {
+        int flag = 0;
         Object[] temp = new Object[this.elements.length - 1];
         for (int i = 0; i < this.elements.length; i++) {
             if (i == index) {
+                flag = 1;
                 continue;
             }
-            temp[i] = this.elements[i];
+            temp[i - flag] = this.elements[i];
         }
         return new ImmutableArrayList(temp);
     }
@@ -86,6 +95,7 @@ public final class ImmutableArrayList implements ImmutableList {
         for (int i = 0; i < this.elements.length; i++) {
             if (i == index) {
                 temp[i] = e;
+                continue;
             }
             temp[i] = this.elements[i];
         }
