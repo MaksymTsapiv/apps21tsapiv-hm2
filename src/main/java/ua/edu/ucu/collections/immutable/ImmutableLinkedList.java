@@ -27,7 +27,7 @@ public final class ImmutableLinkedList implements ImmutableList {
 
     @Override
     public ImmutableList add(Object e) {
-        if (this.size() == 0){
+        if (this.size() == 0) {
             Object[] temp = new Object[1];
             temp[0] = e;
             return new ImmutableLinkedList(temp);
@@ -89,7 +89,9 @@ public final class ImmutableLinkedList implements ImmutableList {
 
     @Override
     public ImmutableList remove(int index) {
-        if(this.nodes.length == 1) return new ImmutableLinkedList();
+        if (this.nodes.length == 1) {
+            return new ImmutableLinkedList();
+        }
         int flag = 0;
         Object[] temp = new Object[this.nodes.length - 1];
         for (int i = 0; i < this.nodes.length; i++) {
