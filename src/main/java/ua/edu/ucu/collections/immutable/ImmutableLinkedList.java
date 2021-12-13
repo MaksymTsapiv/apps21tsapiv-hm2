@@ -1,9 +1,9 @@
 package ua.edu.ucu.collections.immutable;
 
 public final class ImmutableLinkedList implements ImmutableList {
+    private final Node head;
     private Object[] elements;
     private Node[] nodes;
-    private final Node head;
     private Node tail;
 
     public ImmutableLinkedList(Object[] elements) {
@@ -106,7 +106,7 @@ public final class ImmutableLinkedList implements ImmutableList {
     @Override
     public int indexOf(Object e) {
         for (int i = 0; i < this.elements.length; i++) {
-            if (this.elements[i] == e){
+            if (this.elements[i] == e) {
                 return i;
             }
         }

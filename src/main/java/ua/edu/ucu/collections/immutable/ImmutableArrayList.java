@@ -1,11 +1,11 @@
 package ua.edu.ucu.collections.immutable;
 
 public final class ImmutableArrayList implements ImmutableList {
-    private Object[] elements;
+    private final Object[] elements;
 
     public ImmutableArrayList(Object[] elements) {
         this.elements = new Object[elements.length];
-        for (int i = 0; i < elements.length - 1; i++) {
+        for (int i = 0; i < elements.length; i++) {
             this.elements[i] = elements[i];
         }
     }
@@ -17,7 +17,7 @@ public final class ImmutableArrayList implements ImmutableList {
     @Override
     public ImmutableList add(Object e) {
         Object[] temp = new Object[this.elements.length + 1];
-        for (int i = 0; i < this.elements.length - 1; i++) {
+        for (int i = 0; i < this.elements.length; i++) {
             temp[i] = this.elements[i];
         }
         temp[this.elements.length] = e;
@@ -28,12 +28,12 @@ public final class ImmutableArrayList implements ImmutableList {
     public ImmutableList add(int index, Object e) {
         int flag = 0;
         Object[] temp = new Object[this.elements.length + 1];
-        for (int i = 0; i < this.elements.length + 1; i++) {
+        for (int i = 0; i < this.elements.length; i++) {
             if (i == index) {
                 flag = 1;
                 temp[i] = e;
             }
-            temp[i - flag] = this.elements[i];
+            temp[i + flag] = this.elements[i];
         }
         return new ImmutableArrayList(temp);
     }
@@ -95,7 +95,7 @@ public final class ImmutableArrayList implements ImmutableList {
     @Override
     public int indexOf(Object e) {
         for (int i = 0; i < this.elements.length; i++) {
-            if (this.elements[i] == e){
+            if (this.elements[i] == e) {
                 return i;
             }
         }
@@ -119,7 +119,7 @@ public final class ImmutableArrayList implements ImmutableList {
 
     @Override
     public Object[] toArray() {
-        Object [] temp = new Object[elements.length];
+        Object[] temp = new Object[elements.length];
         for (int i = 0; i < elements.length; i++) {
             temp[i] = elements[i];
         }
